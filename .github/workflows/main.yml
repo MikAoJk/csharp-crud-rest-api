@@ -1,0 +1,24 @@
+name: build main branch
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    name: Checkout code and test, clean build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+      - name: Checkout code
+        uses: actions/checkout@v6.0.3
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: Run tests
+        run: dotnet test --no-restore
+      - name: Run clean build
+        run: |
+          dotnet clean
+          dotnet build --no-restore
