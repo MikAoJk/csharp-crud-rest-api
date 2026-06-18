@@ -13,6 +13,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v6.0.3
+
       - name: Dependency review
         uses: actions/dependency-review-action@v5.0.0
         with:
