@@ -1,0 +1,9 @@
+public interface IDatabase
+{
+    void RunMigrations();
+    void SaveUser(UserRequest user);
+    List<UserInDB> GetAllUsers();
+    UserInDB? GetUserById(int id);
+    bool UpdateUser(UserRequest user, int id);
+    bool DeleteUser(int id);
+}

@@ -1,0 +1,43 @@
+using Microsoft.AspNetCore.Mvc;
+
+[ApiController]
+public class UserController(UserService userService) : ControllerBase
+{
+    [HttpPost("/user")]
+    public IActionResult CreateUser([FromBody] UserRequest user)
+    {
+        try
+        {
+            userService.SaveUser(user);
+            return Ok("User saved");
+        }
+        catch
+        {
+            return StatusCode(500, $"user could not be saved in DB, {user}");
+        }
+    }
+
+    [HttpGet("/users")]
+    public IActionResult GetAllUsers() => Ok(userService.GetAllUsers());
+
+    [HttpGet("/user/{id}")]
+    public IActionResult GetUserById(int id)
+    {
+        var user = userService.GetUserById(id);
+        return user is null ? NotFound($"user with id: {id} not found") : Ok(user);
+    }
+
+    [HttpPut("/user/{id}")]
+    public IActionResult UpdateUser(int id, [FromBody] UserRequest user)
+    {
+        var success = userService.UpdateUser(user, id);
+        return success ? Ok($"updated user with id: {id}") : NotFound($"user with id: {id} not updated");
+    }
+
+    [HttpDelete("/user/{id}")]
+    public IActionResult DeleteUser(int id)
+    {
+        var success = userService.DeleteUserById(id);
+        return success ? Ok($"deleted user with id: {id}") : NotFound($"user with id: {id} not deleted");
+    }
+}
