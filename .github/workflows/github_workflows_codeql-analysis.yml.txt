@@ -1,0 +1,40 @@
+name: CodeQL
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  schedule:
+    - cron: '32 13 * * 1'
+  workflow_dispatch:
+jobs:
+  analyze:
+    name: Analyze
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+    strategy:
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v6.0.3
+      
+      - uses: github/codeql-action/init@v4.36.2
+        with:
+          languages: kotlin
+          
+      - uses: actions/setup-java@v5
+        id: setup-java
+        with:
+          distribution: "temurin"
+          java-version: "25"
+
+      - name: Gradle build
+        run: ./gradlew build -x test
+      
+      - uses: github/codeql-action/analyze@v4.36.2
+        with:
+          category: "/language:kotlin"
