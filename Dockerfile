@@ -9,4 +9,4 @@ COPY --from=build /app/publish .
 ENV TZ="Europe/Oslo"
 EXPOSE 8080
 USER app
-ENTRYPOINT ["dotnet", "CSharpKtorCrudRestApi.dll"]
+ENTRYPOINT ["dotnet", "CSharpCrudRestApi.dll"]
