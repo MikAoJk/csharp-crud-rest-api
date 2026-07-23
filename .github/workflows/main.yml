@@ -13,7 +13,7 @@ jobs:
         with:
           dotnet-version: '10.0.x'
       - name: Checkout code
-        uses: actions/checkout@v7.0.0
+        uses: actions/checkout@v7.0.1
       - name: Restore dependencies
         run: dotnet restore
       - name: Run tests
