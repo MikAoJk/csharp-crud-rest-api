@@ -39,12 +39,12 @@ dotnet test
 ##### Create docker image of the C# app
 Creating a docker image should be as simple as
 ```bash
-sudo docker build -t csharpcrudrestapi .
+docker build -t csharpcrudrestapi .
 ```
 
 ##### 👟 Run all the needed services and the application
 ```bash script
-docker compose up
+docker compose up -d
 ```
 
 ##### 🧪 Test the applications endpoints
