@@ -8,7 +8,7 @@ builder.Services.AddControllers().ConfigureApiBehaviorOptions(options =>
     options.InvalidModelStateResponseFactory = _ => ApiResponse.InternalError();
 });
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options => options.OperationFilter<UserRequestOperationFilter>());
+builder.Services.AddSwaggerGen();
 builder.Services.AddCors();
 
 var connectionString = $"Host={Environment.GetEnvironmentVariable("DATABASE_HOST_URL") ?? "localhost"};Port=5432;Database=postgres;Username=postgres;Password=postgres";
