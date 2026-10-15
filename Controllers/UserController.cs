@@ -1,43 +1,73 @@
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
+using Npgsql;
 
 [ApiController]
-public class UserController(UserService userService) : ControllerBase
+public class UserController(UserService userService, ILogger<UserController> logger) : ControllerBase
 {
-    [HttpPost("/user")]
-    public IActionResult CreateUser([FromBody] UserRequest user)
+    private static readonly JsonSerializerOptions RequestJsonOptions = new()
     {
-        try
-        {
-            userService.SaveUser(user);
-            return Ok("User saved");
-        }
-        catch
-        {
-            return StatusCode(500, $"user could not be saved in DB, {user}");
-        }
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+    };
+
+    [HttpPost("/users")]
+    public async Task<IActionResult> CreateUser()
+    {
+        var user = await ReadUser();
+        if (user is null)
+            return ApiResponse.InternalError();
+
+        userService.SaveUser(user);
+        return ApiResponse.Ok("User created");
     }
 
     [HttpGet("/users")]
-    public IActionResult GetAllUsers() => Ok(userService.GetAllUsers());
+    public IActionResult GetAllUsers() => ApiResponse.Json(userService.GetAllUsers());
 
-    [HttpGet("/user/{id}")]
+    [HttpGet("/users/{id}")]
     public IActionResult GetUserById(int id)
     {
-        var user = userService.GetUserById(id);
-        return user is null ? NotFound($"user with id: {id} not found") : Ok(user);
+        try
+        {
+            var user = userService.GetUserById(id);
+            return user is null ? ApiResponse.NotFound() : ApiResponse.Json(user);
+        }
+        catch (PostgresException exception)
+        {
+            logger.LogError(exception, "User lookup failed for ID {UserId}", id);
+            return ApiResponse.NotFound();
+        }
     }
 
-    [HttpPut("/user/{id}")]
-    public IActionResult UpdateUser(int id, [FromBody] UserRequest user)
+    [HttpPut("/users/{id}")]
+    public async Task<IActionResult> UpdateUser(int id)
     {
-        var success = userService.UpdateUser(user, id);
-        return success ? Ok($"updated user with id: {id}") : NotFound($"user with id: {id} not updated");
+        var user = await ReadUser();
+        if (user is null)
+            return ApiResponse.InternalError();
+
+        userService.UpdateUser(user, id);
+        return ApiResponse.Ok("User updated");
     }
 
-    [HttpDelete("/user/{id}")]
+    [HttpDelete("/users/{id}")]
     public IActionResult DeleteUser(int id)
     {
         var success = userService.DeleteUserById(id);
-        return success ? Ok($"deleted user with id: {id}") : NotFound($"user with id: {id} not deleted");
+        return success ? ApiResponse.Ok("User deleted") : ApiResponse.NotFound();
+    }
+
+    private async Task<UserRequest?> ReadUser()
+    {
+        try
+        {
+            var user = await JsonSerializer.DeserializeAsync<UserRequest>(
+                Request.Body, RequestJsonOptions, HttpContext.RequestAborted);
+            return user is { Name: not null, Email: not null } ? user : null;
+        }
+        catch (JsonException)
+        {
+            return null;
+        }
     }
 }

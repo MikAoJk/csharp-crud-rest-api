@@ -2,23 +2,34 @@
 Simple application to showcase a CRUD Rest API application in C# with ASP.NET Core
 
 ### Prerequisites
+#### dotnet
 Make sure you have .NET 9 installed.
 You can check which version you have installed using this command:
 ```bash script
 dotnet --version
 ```
+or install it: https://dotnet.microsoft.com/en-us/download/dotnet/9.0
 
 #### Docker
 Make sure you have docker installed using this command:
 ```bash script
 docker --version
 ```
+or install it: https://docs.docker.com/engine/install/
+
+#### Docker Compose
+Make sure you have docker compose installed using this command:
+```bash script
+docker compose version
+```
+or install it: https://docs.docker.com/compose/install/
 
 #### Curl
 Make sure you have curl installed using this command:
 ```bash script
 curl --version
 ```
+or install it: https://curl.se/docs/install.html
 
 ### Running the application locally
 
@@ -36,18 +47,30 @@ dotnet test
 
 #### Running the application locally
 
-##### Create docker image of the C# app
+##### Create docker image of the app
 Creating a docker image should be as simple as
 ```bash
 docker build -t csharpcrudrestapi .
 ```
 
-##### 👟 Run all the needed services and the application
+##### Run all the needed services and the application
 ```bash script
 docker compose up -d
 ```
 
+remember to take it down after use:
+```bash script
+docker compose down
+```
+
 ##### 🧪 Test the applications endpoints
+
+Request to create a new user
+```bash script
+curl --location --request POST 'http://localhost:8080/users' \
+--header 'Content-Type: application/json' \
+--data-raw '{"name": "aaa","email": "aaa@mail"}'
+```
 
 Request to get all the users:
 ```bash script
@@ -67,16 +90,10 @@ Example of a response:
   }
 ]`
 
-Request to create a new user
-```bash script
-curl --location --request POST 'http://localhost:8080/user' \
---header 'Content-Type: application/json' \
---data-raw '{"name": "aaa","email": "aaa@mail"}'
-```
 
 Request to get one specific user:
 ```bash script
-curl --location --request GET 'http://localhost:8080/user/2'
+curl --location --request GET 'http://localhost:8080/users/2'
 ```
 Example of a response:
 `{
@@ -87,14 +104,14 @@ Example of a response:
 
 Request to update a user
 ```bash script
-curl --location --request PUT 'http://localhost:8080/user/2' \
+curl --location --request PUT 'http://localhost:8080/users/2' \
 --header 'Content-Type: application/json' \
---data-raw '{"id":2,"name": "new","email": "new@mail"}'
+--data-raw '{"name": "new","email": "new@mail"}'
 ```
 
 Request to delete a user
 ```bash script
-curl --location --request DELETE 'http://localhost:8080/user/3'
+curl --location --request DELETE 'http://localhost:8080/users/3'
 ```
 
 #### Api documentation
