@@ -3,12 +3,12 @@ Simple application to showcase a CRUD Rest API application in C# with ASP.NET Co
 
 ### Prerequisites
 #### dotnet
-Make sure you have .NET 9 installed.
+Make sure you have .NET 10 installed.
 You can check which version you have installed using this command:
 ```bash script
 dotnet --version
 ```
-or install it: https://dotnet.microsoft.com/en-us/download/dotnet/9.0
+or install it: https://dotnet.microsoft.com/en-us/download/dotnet/10.0
 
 #### Docker
 Make sure you have docker installed using this command:
