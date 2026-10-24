@@ -20,5 +20,5 @@ or install it: https://grafana.com/docs/k6/latest/set-up/install-k6/
 4. Run the performance test
 ```bash script
 cd performance-test
-k6 run -e BASE_URL=http://localhost:8080 -- script.js
+k6 run -e BASE_URL=http://localhost:8080 script.js
 ```
