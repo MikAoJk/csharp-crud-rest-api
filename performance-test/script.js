@@ -2,9 +2,17 @@ import http from 'k6/http';
 import { sleep, check, fail } from 'k6';
 import exec from 'k6/execution';
 
+
 export const options = {
-  vus: 10,
-  duration: '30s',
+  startVUs: 0,
+  stages: [
+    { duration: '30s', target: 20 }, 
+    { duration: '1m', target: 100 }, 
+    { duration: '2m', target: 100 }, 
+    { duration: '1m', target: 200 },
+    { duration: '2m', target: 200 },
+    { duration: '30s', target: 0 },
+  ],
   thresholds: {
     checks: ['rate==1'],
     http_req_failed: ['rate==0'],
