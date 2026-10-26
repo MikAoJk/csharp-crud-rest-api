@@ -2,6 +2,14 @@ services:
   csharpcrudrestapi:
     container_name: csharpcrudrestapi
     image: csharpcrudrestapi
+    deploy:
+      resources:
+        limits:
+          cpus: '0.1' 
+          memory: 512M 
+        reservations:
+          cpus: '0.25'
+          memory: 256M
     environment:
       - DATABASE_HOST_URL=db
     ports:
