@@ -60,7 +60,7 @@ docker compose up -d
 
 remember to take it down after use:
 ```bash script
-docker compose down
+docker compose down --volumes
 ```
 
 ##### 🧪 Test the applications endpoints
