@@ -21,7 +21,15 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<IDatabase>();
-    db.RunMigrations();
+    try
+    {
+        db.RunMigrations();
+    }
+    catch (NpgsqlException exception)
+    {
+        app.Logger.LogError(exception,
+            "Startup database migrations failed. Process metrics remain available; database endpoints may fail.");
+    }
 }
 
 app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());

@@ -15,9 +15,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v7.0.1
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore tests/CSharpCrudRestApi.Tests.csproj
       - name: Run tests
-        run: dotnet test --no-restore
+        run: dotnet test tests/CSharpCrudRestApi.Tests.csproj --no-restore
       - name: Run clean build
         run: |
           dotnet clean

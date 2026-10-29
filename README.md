@@ -42,7 +42,7 @@ dotnet build
 ### Test code
 Run all the tests
 ```bash script
-dotnet test
+dotnet test tests/CSharpCrudRestApi.Tests.csproj
 ```
 
 #### Running the application locally
@@ -113,6 +113,23 @@ Request to delete a user
 ```bash script
 curl --location --request DELETE 'http://localhost:8080/users/3'
 ```
+
+Request a fresh sample of the API process metrics:
+```bash script
+curl 'http://localhost:8080/metrics'
+```
+Example response:
+```json
+{
+  "cpu_seconds_total": 1.25,
+  "memory_rss_bytes": 73400320,
+  "process_id": 1234,
+  "sampled_at_unix_seconds": 1793281040.385
+}
+```
+
+`sampled_at_unix_seconds` is numeric seconds since the Unix epoch (UTC), including
+fractional seconds, matching the k6 sampler's expected timestamp format.
 
 #### Api documentation
 The api documentation is available here
